@@ -1,0 +1,40 @@
+# depslib dependency file v1.0
+1331395636 source:c:\users\philippe\git\percentagetransformator\src\csvparser.cpp
+	"../include/CSVParser.h"
+	<iostream>
+	<fstream>
+	<vector>
+	<algorithm>
+	<numeric>
+	<sstream>
+	<string>
+	<stdio.h>
+	<string.h>
+
+1331395086 c:\users\philippe\git\percentagetransformator\include\csvparser.h
+	<iostream>
+	<fstream>
+	<vector>
+	<algorithm>
+	<numeric>
+	<sstream>
+	<string>
+	<stdio.h>
+	<string.h>
+	"Utils.h"
+
+1331378417 c:\users\philippe\git\percentagetransformator\include\utils.h
+	<vector>
+
+1331401600 source:c:\users\philippe\git\percentagetransformator\main.cpp
+	<iostream>
+	"include/CSVParser.h"
+
+1331585320 source:c:\users\philippe\git\percentagetransformator\src\shrinker.cpp
+	"../include/Shrinker.h"
+
+1331585337 c:\users\philippe\git\percentagetransformator\include\shrinker.h
+	"CSVParser.h"
+	<vector>
+	<iostream>
+
