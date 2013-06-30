@@ -9,6 +9,7 @@ public class XMLHandler extends DefaultHandler {
 	ArtistFinder artistFinder = new ArtistFinder();
 	boolean albumFound = false;
 	boolean songTitleFound = false;
+	boolean songUnavailable = false;
 
 	SongEntity lastSongEntity = null;
 	SongList songList = null;
@@ -19,6 +20,13 @@ public class XMLHandler extends DefaultHandler {
 
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
+
+		if (qName.equalsIgnoreCase("tr")) {
+			String clazz = attributes.getValue("class");
+			if (clazz.contains("song unavailable")) {
+				songUnavailable = true;
+			}
+		}
 
 		if (qName.equalsIgnoreCase("td")) {
 			String clazz = attributes.getValue("class");
@@ -35,7 +43,7 @@ public class XMLHandler extends DefaultHandler {
 				albumFound = true;
 			} else {
 				String dataTarget = attributes.getValue("data-target");
-				if(dataTarget != null && dataTarget.equalsIgnoreCase("track")) {
+				if (dataTarget != null && dataTarget.equalsIgnoreCase("track")) {
 					songTitleFound = true;
 				}
 			}
@@ -55,10 +63,14 @@ public class XMLHandler extends DefaultHandler {
 			callbackArtistFound(artistName);
 			artistFinder.reset();
 		} else if (albumFound) {
-			String albumTitle = new String(ch, start, length);
-			callbackAlbumTitle(albumTitle);
+			if (!songUnavailable) {
+				String albumTitle = new String(ch, start, length);
+				callbackAlbumTitle(albumTitle);
+			} else {
+				songUnavailable = false;
+			}
 			albumFound = false;
-		} else if(songTitleFound) {
+		} else if (songTitleFound) {
 			String songTitle = new String(ch, start, length);
 			callbackSongTitle(songTitle);
 			songTitleFound = false;
@@ -69,12 +81,12 @@ public class XMLHandler extends DefaultHandler {
 	private void callbackSongTitle(String songTitle) {
 		lastSongEntity = new SongEntity();
 		lastSongEntity.setSongTitle(songTitle);
-		
+
 	}
 
 	private void callbackArtistFound(String artistName) {
-		if(lastSongEntity != null) {
-			lastSongEntity.setAuthor(artistName);	
+		if (lastSongEntity != null) {
+			lastSongEntity.setAuthor(artistName);
 		}
 	}
 
@@ -84,5 +96,4 @@ public class XMLHandler extends DefaultHandler {
 			songList.push(lastSongEntity);
 		}
 	}
-
 }

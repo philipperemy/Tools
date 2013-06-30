@@ -12,11 +12,12 @@ public class DeezerMain {
 		XMLParser xmlParser = new XMLParser();
 		SongList songList = new SongList();
 		try {
-			xmlParser.parse("C:\\Users\\Philippe Rémy\\Desktop\\musics.xml", songList);
+			xmlParser.parse("C:\\Users\\Philippe Rémy\\Desktop\\musics.xml",
+					songList);
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		songList.print();
 	}
 

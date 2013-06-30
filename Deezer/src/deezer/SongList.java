@@ -13,9 +13,15 @@ public class SongList {
 
 	public void print() {
 		int count = 0;
-		for(SongEntity songEntity : list) {
-			System.out.println(++count + " " + songEntity.getSongTitle() + " | " + songEntity.getAuthor() + " | " + songEntity.getAlbum());
+		for (SongEntity songEntity : list) {
+			System.out.println(++count + " " + songEntity.getSongTitle()
+					+ " | " + songEntity.getAuthor() + " | "
+					+ songEntity.getAlbum());
 		}
+	}
+
+	public SongEntity get(int i) {
+		return list.get(i);
 	}
 
 }

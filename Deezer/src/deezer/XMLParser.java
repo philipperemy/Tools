@@ -16,8 +16,8 @@ import org.xml.sax.SAXException;
 
 public class XMLParser {
 
-	public void parse(String filename, SongList songList) throws ParserConfigurationException,
-			SAXException, IOException {
+	public void parse(String filename, SongList songList)
+			throws ParserConfigurationException, SAXException, IOException {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		SAXParser saxParser = factory.newSAXParser();
 
