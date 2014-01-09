@@ -2,20 +2,16 @@ package connection;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import connection.Constants.City;
 
 public class GrouponHttpCall extends HttpCall
 {
 
-    private Map<Double, String> patternsMapCached = null;
-
-    private NumberFormat        formatter         = new DecimalFormat("##,## euros");
+    private List<String> patternsListCached = null;
 
     private String createURLQuery(String cityName)
     {
@@ -43,7 +39,7 @@ public class GrouponHttpCall extends HttpCall
         {
             correspondingDeals.put(city, new ArrayList<String>());
 
-            for (Entry<Double, String> patternEntry : getAllPatterns(maxPrice).entrySet())
+            for (String pattern : getAllPatterns(maxPrice))
             {
                 boolean getDealNameAndBreak = false;
 
@@ -58,14 +54,13 @@ public class GrouponHttpCall extends HttpCall
                         }
 
                         // Deal name line
-                        String dealName = "( " + formatter.format(patternEntry.getKey()) + " ) ";
-                        dealName += extractDealName(str);
+                        String dealName = extractDealName(str);
                         correspondingDeals.get(city).add(dealName);
 
                         getDealNameAndBreak = false;
                     }
 
-                    if (str.contains(patternEntry.getValue()))
+                    if (str.contains(pattern))
                     {
                         getDealNameAndBreak = true;
                     }
@@ -93,17 +88,14 @@ public class GrouponHttpCall extends HttpCall
         resultStr = resultStr.replaceAll("à«", "ë");
         resultStr = resultStr.replaceAll("Å“", "oe");
         resultStr = resultStr.replaceAll("  ", " ");
-        resultStr = resultStr.replaceAll("à¤", "a");
-        resultStr = resultStr.replaceAll("sâ„¢", "s");
-        resultStr = resultStr.replaceAll("à¢", "â");
         return resultStr;
     }
 
-    private Map<Double, String> getAllPatterns(double maxPrice)
+    private List<String> getAllPatterns(double maxPrice)
     {
-        if (patternsMapCached == null)
+        if (patternsListCached == null)
         {
-            Map<Double, String> patternsMap = new HashMap<>();
+            List<String> patternsList = new ArrayList<>();
             while (maxPrice >= 0)
             {
                 String pattern = new DecimalFormat("#.##").format(maxPrice);
@@ -123,13 +115,13 @@ public class GrouponHttpCall extends HttpCall
 
                 pattern = " " + pattern + " &euro; au lieu de";
 
-                patternsMap.put(maxPrice, pattern);
+                patternsList.add(pattern);
                 maxPrice -= 0.01;
             }
 
-            patternsMapCached = patternsMap;
+            patternsListCached = patternsList;
         }
 
-        return patternsMapCached;
+        return patternsListCached;
     }
 }
